@@ -7,11 +7,9 @@ import { addFriendValidator } from "@/lib/validations/add-friend";
 import { getServerSession } from "next-auth";
 import { z } from "zod";
 
-export async function POST(req: Request) {
+export async function addFriend(value: z.infer<typeof addFriendValidator>) {
   try {
-    const body = await req.json();
-
-    const { email: emailToAdd } = addFriendValidator.parse(body.email);
+    const { email: emailToAdd } = addFriendValidator.parse(value.email);
 
     const idToAdd = (await fetchRedis(
       "get",

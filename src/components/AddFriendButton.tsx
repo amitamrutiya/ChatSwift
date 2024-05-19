@@ -7,6 +7,7 @@ import Button from "./ui/Button";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { addFriend } from "@/actions/friends/add";
 
 interface AddFriendButtonProps {}
 
@@ -24,14 +25,9 @@ const AddFriendButton: FC<AddFriendButtonProps> = ({}) => {
     resolver: zodResolver(addFriendValidator),
   });
 
-  const addFriend = async (email: string) => {
+  const onSubmit = async (value: z.infer<typeof addFriendValidator>) => {
     try {
-      const validatedEmail = addFriendValidator.parse({ email });
-
-      await axios.post("/api/friends/add", {
-        email: validatedEmail,
-      });
-
+      await addFriend(value);
       setShowSuccessState(true);
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -46,10 +42,6 @@ const AddFriendButton: FC<AddFriendButtonProps> = ({}) => {
 
       setError("email", { message: "Something went wrong." });
     }
-  };
-
-  const onSubmit = (data: FormData) => {
-    addFriend(data.email);
   };
 
   return (
