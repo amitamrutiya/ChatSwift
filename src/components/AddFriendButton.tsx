@@ -1,7 +1,6 @@
 "use client";
 
 import { addFriendValidator } from "@/lib/validations/add-friend";
-import axios, { AxiosError } from "axios";
 import { FC, useState } from "react";
 import Button from "./ui/Button";
 import { z } from "zod";
@@ -32,11 +31,6 @@ const AddFriendButton: FC<AddFriendButtonProps> = ({}) => {
     } catch (error) {
       if (error instanceof z.ZodError) {
         setError("email", { message: error.message });
-        return;
-      }
-
-      if (error instanceof AxiosError) {
-        setError("email", { message: error.response?.data });
         return;
       }
 
